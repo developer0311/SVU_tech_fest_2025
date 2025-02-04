@@ -1,0 +1,199 @@
+/*-------------------------- BASICS --------------------------*/
+:root {
+  --nav-bg-color: #fff;
+  --nav-text-color: #fff;
+
+  --body-bg-color: #000814;
+  --body-text-color: #00eaff;
+
+  --footer-bg-color: #212529;
+  --footer-text-color: #212529;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+  background: var(--body-bg-color);
+  color: var(--body-text-color);
+  font-family: "Orbitron", sans-serif;
+}
+
+body::-webkit-scrollbar {
+  width: 0px;
+}
+
+h1 {
+  font-family: "Nunito", sans-serif;
+}
+
+h3 {
+  font-family: "Fredoka", sans-serif;
+}
+
+p,
+a,
+label,
+input,
+button,
+textarea {
+  font-family: "Montserrat", sans-serif;
+}
+
+p {
+  margin-bottom: 1px;
+}
+
+main {
+  min-height: calc(100vh - 70px - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 30px;
+}
+
+section {
+  width: 90vw;
+  margin: 0px auto 20px auto;
+}
+
+
+/*-------------------------- HEADER --------------------------*/
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.navbar{
+  padding: 20px;
+  background: rgba(0, 234, 255, 0.1);
+  
+}
+
+.nav-link,
+.navbar-brand{
+  color: var(--body-text-color) !important;
+}
+
+.navbar-toggler,
+.navbar-toggler-icon{
+  color: var(--body-text-color) !important;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav ul li {
+  display: inline;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #00eaff;
+  font-size: 1.2rem;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #ff00ff;
+}
+
+
+/* Custom cursor path styling */
+.cursor {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 234, 255, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 0 0 20px rgba(0, 234, 255, 0.8);
+  transition: transform 0.1s ease-out;
+  transform-origin: center;
+}
+
+.cursor-trail {
+  position: absolute;
+  width: 15px; /* Smaller trail size */
+  height: 15px; /* Smaller trail size */
+  background: rgba(0, 234, 255, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: trail-animation 0.5s forwards;
+  opacity: 0;
+}
+
+/* Adjusted animation for smoother and smaller trails */
+@keyframes trail-animation {
+  0% {
+    transform: scale(0.8); /* Start smaller */
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1); /* Slight grow */
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.5); /* End smaller */
+    opacity: 0;
+  }
+}
+
+/* Heartbeat animation for stationary cursor */
+.cursor.heartbeat {
+  animation: heartbeat 1s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+
+/*-------------------------- HOME.ejs --------------------------*/
+
+.hero {
+  margin-top: 50px;
+  font-size: 1.8rem;
+  padding: 50px;
+  text-align: center;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 15px 30px;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #000016;
+  background: #00eaff;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.cta-button:hover {
+  background: #ff00ff;
+  color: #ffffff;
+}
+
+
