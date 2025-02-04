@@ -6,6 +6,8 @@
   --body-bg-color: #000814;
   --body-text-color: #00eaff;
 
+  --placeholder-color: #13ffff;
+
   --footer-bg-color: #212529;
   --footer-text-color: #212529;
 }
@@ -63,6 +65,61 @@ section {
 }
 
 
+/* Custom cursor path styling */
+.cursor {
+  position: absolute;
+  z-index: 100;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 234, 255, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 0 0 20px rgba(0, 234, 255, 0.8);
+  transition: transform 0.1s ease-out;
+  transform-origin: center;
+}
+
+.cursor-trail {
+  position: absolute;
+  width: 15px; /* Smaller trail size */
+  height: 15px; /* Smaller trail size */
+  background: rgba(0, 234, 255, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: trail-animation 0.5s forwards;
+  opacity: 0;
+}
+
+/* Adjusted animation for smoother and smaller trails */
+@keyframes trail-animation {
+  0% {
+    transform: scale(0.8); /* Start smaller */
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1); /* Slight grow */
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.5); /* End smaller */
+    opacity: 0;
+  }
+}
+
+/* Heartbeat animation for stationary cursor */
+.cursor.heartbeat {
+  animation: heartbeat 1s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
 /*-------------------------- HEADER --------------------------*/
 
 header {
@@ -115,61 +172,6 @@ nav ul li a:hover {
 }
 
 
-/* Custom cursor path styling */
-.cursor {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: rgba(0, 234, 255, 0.5);
-  border-radius: 50%;
-  pointer-events: none;
-  box-shadow: 0 0 20px rgba(0, 234, 255, 0.8);
-  transition: transform 0.1s ease-out;
-  transform-origin: center;
-}
-
-.cursor-trail {
-  position: absolute;
-  width: 15px; /* Smaller trail size */
-  height: 15px; /* Smaller trail size */
-  background: rgba(0, 234, 255, 0.5);
-  border-radius: 50%;
-  pointer-events: none;
-  animation: trail-animation 0.5s forwards;
-  opacity: 0;
-}
-
-/* Adjusted animation for smoother and smaller trails */
-@keyframes trail-animation {
-  0% {
-    transform: scale(0.8); /* Start smaller */
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1); /* Slight grow */
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(0.5); /* End smaller */
-    opacity: 0;
-  }
-}
-
-/* Heartbeat animation for stationary cursor */
-.cursor.heartbeat {
-  animation: heartbeat 1s ease-in-out infinite;
-}
-
-@keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-}
-
-
 /*-------------------------- HOME.ejs --------------------------*/
 
 .hero {
@@ -179,10 +181,16 @@ nav ul li a:hover {
   text-align: center;
 }
 
+.rl-buttons{
+  margin-top: 20px;
+  
+}
+
 .cta-button {
+  width: 150px;
   display: inline-block;
   padding: 15px 30px;
-  margin-top: 20px;
+  margin: 0px 10px;
   font-size: 1.2rem;
   color: #000016;
   background: #00eaff;
@@ -196,4 +204,61 @@ nav ul li a:hover {
   color: #ffffff;
 }
 
+/*-------------------------- LOGIN.ejs & REGISTER.ejs --------------------------*/
 
+.l-g-form {
+  margin-bottom: 20px;
+  border: 0px;
+}
+
+.l-g-form .card,
+.l-g-form .card .card-body{
+  background-color: var(--body-bg-color);
+  border: 0px;
+}
+
+.form-group {
+  color: var(--body-text-color);
+  margin-bottom: 10px;
+}
+
+.form-group input{
+  background-color: var(--body-bg-color);
+  color: var(--body-text-color);
+  padding: 10px 15px;
+  outline: none;
+  /* border: none; */
+  border: 0.7px solid var(--body-text-color);
+}
+
+.form-group input::placeholder {
+  color: grey; 
+  opacity: 0.6;  
+  /* text-decoration: underline; */
+}
+
+.card-body img {
+  width: 25px;
+  margin-right: 10px;
+}
+
+.lr {
+  margin-bottom: 20px;
+}
+
+.forgot-password {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 20px 0px 20px;
+}
+
+.send-otp {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.send-otp input {
+  flex: 1;
+  margin-right: 10px;
+}

@@ -1,0 +1,114 @@
+<%- include('partials/header') %>
+<div class="container col-sm-9 col-lg-6 mt-5">
+  <h1>Register</h1>
+
+  <div class="row">
+    <div class="col-sm-12 l-g-form">
+      <div class="card">
+        <div class="card-body">
+
+          <!-- Makes POST request to /register route -->
+          <form class="" action="/register" method="POST">
+            <div class="form-group mb-3">
+              <div class="form-group">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" name="first_name" placeholder="Enter your first name" required>
+              </div>
+
+              <div class="form-group">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" name="last_name" placeholder="Enter your last name">
+              </div>
+
+              <div class="form-group">
+                <label for="mobile_number" class="form-label">Mobile Number</label>
+                <input type="text" class="form-control" name="mobile_number" placeholder="Enter your mobile number" required>
+              </div>
+
+              <label for="email" class="form-label">Email</label>
+              <div class="input-group">
+                  <input type="email" class="form-control" id="email" name="email"
+                      placeholder="Enter your email" required>
+                  <button class="btn btn-primary" id="sendOtpButton" type="button">
+                      Send OTP
+                  </button>
+              </div>
+          </div>
+            <div class="form-group">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" name="password" placeholder="Create your password" required>
+            </div>
+            <div class="form-group mb-3">
+              <label for="otp" class="form-label">OTP</label>
+              <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" required>
+          </div>
+            <button type="submit" class="btn btn-dark">Register</button>
+          </form>
+          <p class="forgot-password"><a href="/login">Already have an account? Login</a></p>
+
+          <div id="message" class="mt-3">
+
+            <% if (locals.errorMessage) { %>
+              <div class="alert alert-danger"><%= errorMessage %></div>
+              <% } %>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12" style="display: none;">
+      <div class="card social-block">
+        <div class="card-body">
+          <a class="btn btn-block" href="/auth/google" role="button">
+            <img src="images/google.png" alt="">
+            Sign Up with Google
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const sendOtpButton = document.getElementById("sendOtpButton");
+      const emailInput = document.getElementById("email");
+      const messageDiv = document.getElementById("message");
+      const emailForm = document.getElementById("emailForm");
+      const otpForm = document.getElementById("otpForm");
+      const otpFormSubmit = document.getElementById("otpFormSubmit");
+
+      // Handle OTP request
+      sendOtpButton.addEventListener("click", async () => {
+          const email = emailInput.value.trim();
+
+          if (!email) {
+              messageDiv.innerHTML = `<div class="alert alert-danger">Please enter a valid email.</div>`;
+              return;
+          }
+
+          try {
+              const response = await fetch("/send-otp", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ email }),
+              });
+
+              const data = await response.json();
+              if (data.success) {
+                  messageDiv.innerHTML = `<div class="alert alert-success">OTP sent successfully to ${email}!</div>`;
+              } else {
+                  messageDiv.innerHTML = `<div class="alert alert-danger">${data.error || "Failed to send OTP."}</div>`;
+              }
+          } catch (err) {
+              console.error("Error sending OTP:", err);
+              messageDiv.innerHTML = `<div class="alert alert-danger">Something went wrong. Please try again later.</div>`;
+          }
+      });
+  });
+</script>
