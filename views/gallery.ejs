@@ -14,11 +14,11 @@
                         <p><%= post.description %></p>
                         <div class="post-like-comment">
                             <div class="l-c-s-d-option">
-                                <a href="/like?id=<%= post.post_id %>">
-                                    <i class="bx <%= post.user_liked ? 'bxs-heart' : 'bx-heart' %>" 
+                                <a href="javascript:void(0);" onclick="toggleLike(<%= post.post_id %>)">
+                                    <i id="like-icon-<%= post.post_id %>" class="bx <%= post.user_liked ? 'bxs-heart' : 'bx-heart' %>" 
                                        style='color:#00eaff' 
                                        title="<%= post.user_liked ? 'Unlike' : 'Like' %>"></i>
-                                    <span><%= post.like_count %></span>
+                                    <span id="like-count-<%= post.post_id %>"><%= post.like_count %></span>
                                 </a>
                             </div>
                             <div class="l-c-s-d-option">
@@ -67,13 +67,44 @@
   ScrollReveal().reveal('.gallery-card', { origin: `bottom` });
   ScrollReveal().reveal('.left', { origin: `left` });
   ScrollReveal().reveal('.right', { origin: `right` });
-</script>
 
-<script>
-function toggleCommentSection(postId) {
+  function toggleLike(postId) {
+  // Perform AJAX request to toggle like/dislike
+  fetch('/like', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ post_id: postId })
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Update UI based on action
+    const likeIcon = document.getElementById('like-icon-' + postId);
+    const likeCount = document.getElementById('like-count-' + postId);
+
+    // Toggle like icon based on the response
+    if (likeIcon.classList.contains('bx-heart')) {
+      likeIcon.classList.remove('bx-heart');
+      likeIcon.classList.add('bxs-heart');
+      likeIcon.title = 'Unlike';
+    } else {
+      likeIcon.classList.remove('bxs-heart');
+      likeIcon.classList.add('bx-heart');
+      likeIcon.title = 'Like';
+    }
+
+    // Update like count dynamically
+    likeCount.textContent = data.like_count;
+  })
+  .catch(err => console.error('Error toggling like:', err));
+}
+
+
+  function toggleCommentSection(postId) {
     let section = document.getElementById("comment-section-" + postId);
     section.style.display = section.style.display === "none" ? "block" : "none";
-}
+  }
 </script>
 
 <%- include('partials/footer') %>

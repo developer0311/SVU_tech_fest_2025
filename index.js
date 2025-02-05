@@ -172,6 +172,97 @@ app.get("/profile", async(req, res) =>{
 res.render(__dirname + '/views/profile', { user: user_result.rows[0], events: events.rows });
 });
 
+
+//-------------------------- LIKE and DISLIKE Routes --------------------------//
+ 
+app.post("/like", async (req, res) => {
+  const userId = 1; // Assuming user ID is stored in session (use session management in your app)
+  const postId = req.body.post_id; // Get post ID from the body of the request
+
+  if (!userId || !postId) {
+    return res.status(400).send("User ID and Post ID are required.");
+  }
+
+  try {
+    // Check if user exists
+    const userExistsResult = await db.query(
+      "SELECT id FROM users WHERE id = $1",
+      [userId]
+    );
+    if (userExistsResult.rows.length === 0) {
+      return res.status(400).send("User does not exist.");
+    }
+
+    // Check if post exists
+    const postExistsResult = await db.query(
+      "SELECT id, like_count FROM gallery WHERE id = $1",
+      [postId]
+    );
+    if (postExistsResult.rows.length === 0) {
+      return res.status(400).send("Post does not exist.");
+    }
+
+    // Check if the user has already liked or disliked the post
+    const likeResult = await db.query(
+      "SELECT action FROM post_likes WHERE user_id = $1 AND post_id = $2",
+      [userId, postId]
+    );
+
+    let action;
+    let newLikeCount;
+
+    if (likeResult.rows.length > 0) {
+      // User has already liked/disliked the post
+      const currentAction = likeResult.rows[0].action;
+
+      if (currentAction === "like") {
+        // Change to dislike
+        await db.query(
+          "UPDATE post_likes SET action = $1 WHERE user_id = $2 AND post_id = $3",
+          ["dislike", userId, postId]
+        );
+        // Decrement the like count
+        const decrementResult = await db.query(
+          "UPDATE gallery SET like_count = like_count - 1 WHERE id = $1 RETURNING like_count",
+          [postId]
+        );
+        newLikeCount = decrementResult.rows[0].like_count;
+      } else {
+        // Change to like
+        await db.query(
+          "UPDATE post_likes SET action = $1 WHERE user_id = $2 AND post_id = $3",
+          ["like", userId, postId]
+        );
+        // Increment the like count
+        const incrementResult = await db.query(
+          "UPDATE gallery SET like_count = like_count + 1 WHERE id = $1 RETURNING like_count",
+          [postId]
+        );
+        newLikeCount = incrementResult.rows[0].like_count;
+      }
+    } else {
+      // User has not yet liked or disliked the post, so insert a new like
+      await db.query(
+        "INSERT INTO post_likes (user_id, post_id, action) VALUES ($1, $2, $3)",
+        [userId, postId, "like"]
+      );
+      // Increment the like count
+      const incrementResult = await db.query(
+        "UPDATE gallery SET like_count = like_count + 1 WHERE id = $1 RETURNING like_count",
+        [postId]
+      );
+      newLikeCount = incrementResult.rows[0].like_count;
+    }
+
+    // Send the updated like count as a JSON response for UI update
+    res.json({ like_count: newLikeCount });
+  } catch (err) {
+    console.error("Error handling like/dislike", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 //-------------------------- REGISTER Routes --------------------------//
 
 app.get("/register", (req, res) => {
