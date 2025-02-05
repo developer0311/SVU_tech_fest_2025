@@ -51,7 +51,7 @@ p {
 }
 
 main {
-  min-height: calc(100vh - 70px - 80px);
+  min-height: calc(100vh - 80px - 116px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -169,6 +169,15 @@ nav ul li a {
 
 nav ul li a:hover {
   color: #ff00ff;
+}
+
+
+/*-------------------------- FOOTER --------------------------*/
+
+
+footer i {
+  font-size: 30px;
+  color: var(--body-text-color);
 }
 
 
