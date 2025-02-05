@@ -1,0 +1,79 @@
+<%- include('partials/header') %>
+
+<section class="gallery">
+    <h2>Gallery</h2>
+    <div class="gallery-posts">
+        <% if (posts.length > 0) { %>
+            <% posts.forEach(function(post) { %>
+                <div class="gallery-card">
+                    <p><strong>Uploaded By:</strong> <%= post.fname %> <%= post.lname %></p>
+                    <div class="image-container">
+                        <img src="<%= post.image_url %>" class="gallery-image" alt="<%= post.description %>">
+                    </div>
+                    <div class="post-details">
+                        <p><%= post.description %></p>
+                        <div class="post-like-comment">
+                            <div class="l-c-s-d-option">
+                                <a href="/like?id=<%= post.post_id %>">
+                                    <i class="bx <%= post.user_liked ? 'bxs-heart' : 'bx-heart' %>" 
+                                       style='color:#00eaff' 
+                                       title="<%= post.user_liked ? 'Unlike' : 'Like' %>"></i>
+                                    <span><%= post.like_count %></span>
+                                </a>
+                            </div>
+                            <div class="l-c-s-d-option">
+                                <i class='bx bx-message-rounded-dots' title="Comment" 
+                                   onclick="toggleCommentSection('<%= post.post_id %>')"></i>
+                                <span><%= post.comment_count %></span>
+                            </div>
+                            <div class="l-c-s-d-option">
+                                <i class='bx bx-share' title="Share"></i>
+                                <span><%= post.share_count %></span>
+                            </div>
+                        </div>
+                        <div class="comment-section" id="comment-section-<%= post.post_id %>" style="display: none;">
+                            <form action="/comment" method="POST">
+                                <input type="hidden" name="post_id" value="<%= post.post_id %>">
+                                <textarea name="comment" placeholder="Write a comment..." required></textarea>
+                                <button type="submit" class="submit-comment" title="Post"><i class='bx bxs-send'></i></button>
+                            </form>
+                            <div class="comments-list">
+                                <% post.comments.forEach(function(comment) { %>
+                                    <div class="comment">
+                                        <p><strong><%= comment.username %>:</strong> <%= comment.comment %></p>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No posts found.</p>
+        <% } %>
+    </div>
+</section>
+
+<script src="https://unpkg.com/scrollreveal"></script>
+<script>
+  ScrollReveal({
+    reset: true,
+    distance: "60px",
+    duration: 2000,
+    delay: 200
+  });
+
+  ScrollReveal().reveal('', { origin: `top` });
+  ScrollReveal().reveal('.gallery-card', { origin: `bottom` });
+  ScrollReveal().reveal('.left', { origin: `left` });
+  ScrollReveal().reveal('.right', { origin: `right` });
+</script>
+
+<script>
+function toggleCommentSection(postId) {
+    let section = document.getElementById("comment-section-" + postId);
+    section.style.display = section.style.display === "none" ? "block" : "none";
+}
+</script>
+
+<%- include('partials/footer') %>

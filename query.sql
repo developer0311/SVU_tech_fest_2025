@@ -61,7 +61,31 @@ CREATE TABLE gallery (
     image_url TEXT NOT NULL,
     description TEXT,
     uploaded_by INT REFERENCES users(id) ON DELETE SET NULL,
-    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    like_count INT DEFAULT 0,               -- New field for likes
+    comment_count INT DEFAULT 0,            -- New field for the number of comments
+    share_count INT DEFAULT 0,              -- New field for the number of shares
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+------------------------------- POST_LIKES TABLE -------------------------------
+
+CREATE TABLE post_likes (
+    id SERIAL PRIMARY KEY,
+    post_id INT REFERENCES gallery(id) ON DELETE CASCADE,  -- Updated to reference gallery(id)
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    action VARCHAR(10) CHECK (action IN ('like', 'dislike')) NOT NULL,
+    liked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+------------------------------- POST_COMMENTS TABLE -------------------------------
+
+CREATE TABLE post_comments (
+    id SERIAL PRIMARY KEY,
+    post_id INT REFERENCES gallery(id) ON DELETE CASCADE,  -- Updated to reference gallery(id)
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    comment TEXT NOT NULL,
+    commented_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Contacts Table (For user queries)
