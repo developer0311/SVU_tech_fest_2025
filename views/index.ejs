@@ -1,0 +1,77 @@
+<%- include('partials/header') %>
+
+    <section class="hero" id="home">
+        <div class="hero-text">
+            <h1 class="mb-3">Welcome to the Future of Technology</h1>
+            <h3 class="mb-5"><span class="multiple-text"></span></h3>
+        </div>
+        <div class="cta-buttons">
+            <a href="#events" class="cta-button explore-events">Explore Events</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <h2>About Tech Fest 2025</h2>
+        <p>Join the most exciting tech fest of 2025. Experience innovation, collaboration, and a glimpse into the future
+            of
+            technology. Get ready for hands-on workshops, keynotes by industry leaders, and a chance to be part of
+            groundbreaking projects!</p>
+    </section>
+
+    <!-- Events Section -->
+    <section class="events" id="events">
+        <h2>Our Featured Events</h2>
+        <div class="event-list">
+            <div class="event-item">
+                <h3>AI Innovations</h3>
+                <p>Explore the world of artificial intelligence with live demos and expert talks.</p>
+            </div>
+            <div class="event-item">
+                <h3>Robotics Revolution</h3>
+                <p>Join us for interactive robotics workshops and discover the future of automation.</p>
+            </div>
+            <div class="event-item">
+                <h3>Blockchain Bootcamp</h3>
+                <p>Learn how blockchain is transforming industries through hands-on activities.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scroll Reveal -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+
+    <!-- Typed.js -->
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+    <script>
+        // Multiple Text
+        const typed = new Typed(".multiple-text", {
+            strings: [
+                "Innovating the Future",
+                "Connecting Creators",
+                "Shaping Tomorrow's Tech"
+            ],
+            typeSpeed: 80,
+            backSpeed: 80,
+            backDelay: 1000,
+            loop: true
+        });
+
+
+        // Scroll reveal
+
+        ScrollReveal({
+            reset: true,
+            distance: "60px",
+            duration: 2000,
+            delay: 200
+        });
+
+        ScrollReveal().reveal('.events h2, .event-item', { origin: `top` });
+        ScrollReveal().reveal('.cta-buttons, .hero-text, .about', { origin: `bottom` });
+        ScrollReveal().reveal('', { origin: `left` });
+        ScrollReveal().reveal('', { origin: `right` });
+    </script>
+
+    <%- include('partials/footer') %>

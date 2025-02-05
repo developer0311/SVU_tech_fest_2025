@@ -9,12 +9,12 @@
           <div class="card-body">
 
             <!-- Makes POST request to /login route -->
-            <form  action="/login" method="POST">
-              <div class="form-group">
+            <form action="/login" method="POST">
+              <div class="form-group left">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" name="username" placeholder="Enter your email">
               </div>
-              <div class="form-group">
+              <div class="form-group right">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" name="password" placeholder="Enter your password">
               </div>
@@ -39,5 +39,20 @@
 
     </div>
   </div>
+
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script>
+    ScrollReveal({
+      reset: true,
+      distance: "60px",
+      duration: 2000,
+      delay: 200
+    });
+
+    ScrollReveal().reveal('', { origin: `top` });
+    ScrollReveal().reveal('', { origin: `bottom` });
+    ScrollReveal().reveal('.left, .btn-dark', { origin: `left` });
+    ScrollReveal().reveal('h1, .right, .forgot-password', { origin: `right` });
+  </script>
 
   <%- include('partials/footer') %>

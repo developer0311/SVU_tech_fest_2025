@@ -8,8 +8,8 @@ function createTrail(x, y) {
     trail.classList.add('cursor-trail');
     document.body.appendChild(trail);
 
-    trail.style.left = `${x - 10}px`;  // Offset to center the trail
-    trail.style.top = `${y - 10}px`;  // Offset to center the trail
+    trail.style.left = `${x - 10 + window.scrollX}px`;  // Offset to center the trail, considering scroll
+    trail.style.top = `${y - 10 + window.scrollY}px`;  // Offset to center the trail, considering scroll
 
     // Remove the trail after animation completes
     setTimeout(() => {
@@ -21,9 +21,9 @@ function createTrail(x, y) {
 function moveCursor(event) {
     const { clientX: x, clientY: y } = event;
 
-    // Update cursor position
-    cursor.style.left = `${x - 10}px`;
-    cursor.style.top = `${y - 10}px`;
+    // Update cursor position, accounting for scrolling
+    cursor.style.left = `${x - 10 + window.scrollX}px`;
+    cursor.style.top = `${y - 10 + window.scrollY}px`;
 
     // Create trail at each position
     createTrail(x, y);

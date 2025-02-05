@@ -1,14 +1,28 @@
 <%- include('partials/header.ejs') %>
 
-    <section class="hero">
-      <h1>Welcome to TechNova</h1>
-      <p>Experience AI, Robotics, and Next-Gen Innovations.</p>
-      <div class="rl-buttons">
+  <section class="hero">
+    <h1>Welcome to TechNova</h1>
+    <p>Experience AI, Robotics, and Next-Gen Innovations.</p>
+    <div class="rl-buttons">
 
-        <a href="/register" class="cta-button">Register</a>
-        <a href="/login" class="cta-button">Login</a>
-      </div>
-    </section>
+      <a href="/register" class="cta-button my-btn left">Register</a>
+      <a href="/login" class="cta-button my-btn right">Login</a>
+    </div>
+  </section>
 
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script>
+    ScrollReveal({
+      reset: false,
+      distance: "60px",
+      duration: 2000,
+      delay: 200
+    });
 
-<%- include('partials/footer') %>
+    ScrollReveal().reveal('.hero h1, .hero p', { origin: `top` });
+    ScrollReveal().reveal('.rl-buttons', { origin: `bottom` });
+    ScrollReveal().reveal('.left', { origin: `left` });
+    ScrollReveal().reveal('.right', { origin: `right` });
+  </script>
+
+  <%- include('partials/footer') %>
