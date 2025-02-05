@@ -2,69 +2,75 @@
 
 /* For Mobile (width <= 480px) */
 @media (max-width: 480px) {
-    .cursor {
-      width: 15px;
-      height: 15px;
-    }
-    
-    .cursor-trail {
-      width: 10px; /* Smaller trail for small devices */
-      height: 10px;
-    }
-  
-    .hero {
-      font-size: 1.5rem; /* Smaller text size on mobile */
-      padding: 20px;
-    }
-  
-    .cta-button {
-      padding: 12px 25px;
-      font-size: 1rem;
-    }
+  .cursor {
+    width: 15px;
+    height: 15px;
   }
-  
-  /* For Tablets (width <= 768px) */
-  @media (max-width: 768px) {
-    .cursor {
-      width: 18px;
-      height: 18px;
-    }
-    
-    .cursor-trail {
-      width: 12px;
-      height: 12px;
-    }
-  
-    .hero {
-      font-size: 1.7rem; /* Slightly smaller text */
-      padding: 30px;
-    }
-  
-    .cta-button {
-      padding: 13px 28px;
-      font-size: 1.1rem;
-    }
+
+  .cursor-trail {
+    width: 10px; /* Smaller trail for small devices */
+    height: 10px;
   }
-  
-  /* For Larger Screens (width > 1024px) */
-  @media (min-width: 1024px) {
-    .cursor {
-      width: 25px;
-      height: 25px;
-    }
-    
-    .cursor-trail {
-      width: 20px;
-      height: 20px;
-    }
-  
-    .hero {
-      font-size: 2rem; /* Larger text for wide screens */
-      padding: 60px;
-    }
-  
-    .cta-button {
-      padding: 18px 35px;
-      font-size: 1.3rem;
-    }
+
+  .hero {
+    font-size: 1.5rem; /* Smaller text size on mobile */
+    padding: 20px;
   }
+
+  .cta-button {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+}
+
+/* For Tablets (width <= 768px) */
+@media (max-width: 768px) {
+  .cursor {
+    width: 18px;
+    height: 18px;
+  }
+
+  .cursor-trail {
+    width: 12px;
+    height: 12px;
+  }
+
+  .hero {
+    font-size: 1.7rem; /* Slightly smaller text */
+    padding: 30px;
+  }
+
+  .cta-button {
+    padding: 13px 28px;
+    font-size: 1.1rem;
+  }
+}
+
+/* For Larger Screens (width > 1024px) */
+@media (min-width: 1024px) {
+  .cursor {
+    width: 25px;
+    height: 25px;
+  }
+
+  .cursor-trail {
+    width: 20px;
+    height: 20px;
+  }
+
+  .hero {
+    font-size: 2rem; /* Larger text for wide screens */
+    padding: 60px;
+  }
+
+  .cta-button {
+    padding: 18px 35px;
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .events .card {
+    margin-bottom: 20px;
+  }
+}

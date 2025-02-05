@@ -72,7 +72,7 @@ section {
 }
 
 .my-btn::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   height: 2px;
@@ -114,13 +114,10 @@ section {
   opacity: 0;
 }
 
-
-
 /* Heartbeat animation for stationary cursor */
 .cursor.heartbeat {
   animation: heartbeat 1s ease-in-out infinite;
 }
-
 
 /*-------------------------- ANIMATIONS --------------------------*/
 
@@ -141,7 +138,8 @@ section {
 }
 
 @keyframes heartbeat {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -151,13 +149,16 @@ section {
 
 @keyframes glow {
   0% {
-    text-shadow: 0 0 10px rgba(0, 234, 255, 0.5), 0 0 20px rgba(0, 234, 255, 0.7);
+    text-shadow: 0 0 10px rgba(0, 234, 255, 0.5),
+      0 0 20px rgba(0, 234, 255, 0.7);
   }
   50% {
-    text-shadow: 0 0 20px rgba(0, 234, 255, 0.9), 0 0 40px rgba(0, 234, 255, 0.8);
+    text-shadow: 0 0 20px rgba(0, 234, 255, 0.9),
+      0 0 40px rgba(0, 234, 255, 0.8);
   }
   100% {
-    text-shadow: 0 0 10px rgba(0, 234, 255, 0.5), 0 0 20px rgba(0, 234, 255, 0.7);
+    text-shadow: 0 0 10px rgba(0, 234, 255, 0.5),
+      0 0 20px rgba(0, 234, 255, 0.7);
   }
 }
 
@@ -175,19 +176,18 @@ header {
   font-weight: bold;
 }
 
-.navbar{
+.navbar {
   padding: 20px;
   background: rgba(0, 234, 255, 0.1);
-  
 }
 
 .nav-link,
-.navbar-brand{
+.navbar-brand {
   color: var(--body-text-color) !important;
 }
 
 .navbar-toggler,
-.navbar-toggler-icon{
+.navbar-toggler-icon {
   color: var(--body-text-color) !important;
 }
 
@@ -212,15 +212,12 @@ nav ul li a:hover {
   color: #ff00ff;
 }
 
-
 /*-------------------------- FOOTER --------------------------*/
-
 
 footer i {
   font-size: 30px;
   color: var(--body-text-color);
 }
-
 
 /*-------------------------- HOME.ejs --------------------------*/
 
@@ -231,7 +228,7 @@ footer i {
   text-align: center;
 }
 
-.rl-buttons{
+.rl-buttons {
   margin-top: 20px;
 }
 
@@ -242,16 +239,14 @@ footer i {
   text-transform: uppercase;
   letter-spacing: 2px;
   animation: glow 1.5s ease-in-out infinite alternate;
-
 }
 
-.hero p ,
-.hero span{
+.hero p,
+.hero span {
   color: #ff00ff;
   font-size: 1.3rem;
   margin-top: 20px;
   animation: glow 2s ease-in-out infinite alternate;
-
 }
 
 .cta-button {
@@ -270,9 +265,9 @@ footer i {
 
 .cta-button:hover {
   background: linear-gradient(45deg, #ff00ff, #00eaff);
-    color: #ffffff;
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 234, 255, 0.7);
+  color: #ffffff;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 234, 255, 0.7);
 }
 
 .cta-button:active {
@@ -288,7 +283,7 @@ footer i {
 }
 
 .l-g-form .card,
-.l-g-form .card .card-body{
+.l-g-form .card .card-body {
   background-color: var(--body-bg-color);
   border: 0px;
 }
@@ -298,7 +293,7 @@ footer i {
   margin-bottom: 10px;
 }
 
-.form-group input{
+.form-group input {
   background-color: var(--body-bg-color);
   color: var(--body-text-color);
   padding: 10px 15px;
@@ -308,8 +303,8 @@ footer i {
 }
 
 .form-group input::placeholder {
-  color: grey; 
-  opacity: 0.6;  
+  color: grey;
+  opacity: 0.6;
   /* text-decoration: underline; */
 }
 
@@ -339,10 +334,9 @@ footer i {
   margin-right: 10px;
 }
 
-
 /*-------------------------- INDEX.ejs --------------------------*/
 
-.explore-events{
+.explore-events {
   width: 300px;
 }
 
@@ -365,12 +359,12 @@ footer i {
   line-height: 1.6;
 }
 
-/* Events Section */
-.events {
-  margin-top: 80px;
-  padding: 50px;
+.home-events {
   text-align: center;
 }
+
+
+/*-------------------------- SCHEDULE.ejs --------------------------*/
 
 .events h2 {
   font-size: 2rem;
@@ -401,4 +395,41 @@ footer i {
 
 .event-item p {
   font-size: 1.1rem;
+}
+
+.events .card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.events .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.events .card img {
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.events .card-body {
+  padding: 15px;
+}
+
+.events .card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.events .card-text {
+  margin-bottom: 10px;
+}
+
+.events .btn {
+  width: 100%;
+  margin-top: 10px;
 }

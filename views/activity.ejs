@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+
+
+<%- include('partials/header') %>
+
+<section class="activities">
+    <h2>Upcoming Activities</h2>
+    <div class="activity-list">
+        <% if (activities.length > 0) { %>
+            <% activities.forEach(function(activity) { %>
+                <div class="activity-card">
+                    <h3><%= activity.name %></h3>
+                    <p><strong>Description:</strong> <%= activity.description %></p>
+                    <p><strong>Start Time:</strong> <%= new Date(activity.start_time).toLocaleString() %></p>
+                    <p><strong>End Time:</strong> <%= new Date(activity.end_time).toLocaleString() %></p>
+                    <p><strong>Location:</strong> <%= activity.location %></p>
+                    <a href="/activity/<%= activity.id %>">View Details</a>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No activities scheduled at the moment. Please check back later.</p>
+        <% } %>
+    </div>
+</section>
+
+<%- include('partials/footer') %>
+
+
+<%- include('partials/footer') %>
