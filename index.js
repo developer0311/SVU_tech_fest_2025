@@ -161,6 +161,17 @@ app.get("/gallery", async (req, res) => {
   }
 });
 
+app.get("/profile", async(req, res) =>{
+  const user_result = await db.query(`SELECT * from users WHERE id = $1`,[1]);
+  const events = await db.query(`
+    SELECT * FROM events 
+    JOIN registrations ON events.id =registrations.event_id
+    WHERE registrations.user_id = $1
+`, [1]);
+
+res.render(__dirname + '/views/profile', { user: user_result.rows[0], events: events.rows });
+});
+
 //-------------------------- REGISTER Routes --------------------------//
 
 app.get("/register", (req, res) => {
