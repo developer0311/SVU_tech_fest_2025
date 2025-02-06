@@ -21,6 +21,7 @@ const RAZORPAY_ID_KEY = process.env.RAZORPAY_ID_KEY;
 const RAZORPAY_SECRET_KEY = process.env.RAZORPAY_SECRET_KEY;
 let home_active = "active";
 let cart_active = "";
+let social_active = "";
 
 app.set("view engine", "ejs");
 
@@ -54,6 +55,34 @@ const db = new pg.Client({
 });
 db.connect();
 
+
+
+// ------------------------------------------------------- FUNCTIONS -------------------------------------------------------//
+
+let get_username = (email) => {
+  let username = email.split("@")[0];
+  return username;
+};
+
+let active_page = (pageName) => {
+  if (pageName == "home") {
+    home_active = "my-active";
+    cart_active = "";
+    social_active = "";
+  } else if (pageName == "cart") {
+    home_active = "";
+    cart_active = "my-active";
+    social_active = "";
+  } else if (pageName == "social") {
+    home_active = "";
+    cart_active = "";
+    social_active = "my-active";
+  }
+};
+
+
+//-------------------------- HOME Routes --------------------------//
+
 app.get("/", (req, res) => {
   const username = req.isAuthenticated()
     ? get_username(req.user.email)
@@ -72,32 +101,50 @@ app.get(
 );
 
 app.get("/home", async (req, res) => {
-  const username = req.isAuthenticated()
-    ? get_username(req.user.email)
-    : "Guest";
-  res.render(__dirname + "/views/index.ejs");
+  active_page("home");
+  if (req.isAuthenticated()) {
+    try {
+      const user = req.user;
+      let user_id = user.id;
+  
+      res.render(__dirname + "/views/index.ejs");
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    res.redirect("/login");
+  }
 });
 
 //-------------------------- SCHEDULE Routes --------------------------//
 
 app.get("/schedule", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/login"); // Redirect to login if not authenticated
+  }
+
   const username = req.isAuthenticated()
     ? get_username(req.user.email)
     : "Guest";
-  const m_result = await db.query(
+  const s_result = await db.query(
     "SELECT * FROM events WHERE start_time >= $1 and event_type = $2 ORDER BY start_time ASC",
     [new Date(), `event`] // Fetch events that are starting now or in the future
   );
 
-  res.render(__dirname + "/views/schedule.ejs", { events: m_result.rows });
+  res.render(__dirname + "/views/schedule.ejs", { events: s_result.rows });
 });
 
 //-------------------------- SCHEDULE Routes --------------------------//
 
 app.get("/activity", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/login"); // Redirect to login if not authenticated
+  }
+
   const username = req.isAuthenticated()
     ? get_username(req.user.email)
     : "Guest";
+
   const m_result = await db.query(
     "SELECT * FROM events WHERE start_time >= $1 and event_type = $2 ORDER BY start_time ASC",
     [new Date(), `activity`] // Fetch events that are starting now or in the future
@@ -149,7 +196,6 @@ app.get("/gallery", async (req, res) => {
       GROUP BY g.id, u.id, u.fname, u.lname, u.email, pl.action
       ORDER BY g.created_at DESC;
     `, [user_id]);
-    
 
     res.render(__dirname + "/views/gallery", {
       user: 1,
@@ -161,8 +207,13 @@ app.get("/gallery", async (req, res) => {
   }
 });
 
+
 app.get("/profile", async(req, res) =>{
-  const user_result = await db.query(`SELECT * from users WHERE id = $1`,[1]);
+  if (!req.isAuthenticated()) {
+    return res.redirect("/login"); // Redirect to login if not authenticated
+  }
+  const user_id = req.user.id
+  const user_result = await db.query(`SELECT * from users WHERE id = $1`,[user_id]);
   const events = await db.query(`
     SELECT * FROM events 
     JOIN registrations ON events.id =registrations.event_id
@@ -273,7 +324,7 @@ app.post("/comment", async (req, res) => {
   
   if (!user.id || !post_id || !comment) {
     console.log(user_id);
-    console.log(post_id_id);
+    console.log(post_id);
     return res.status(400).json({ success: false, message: "Missing fields" });
   }
 
@@ -315,14 +366,355 @@ app.get("/register", (req, res) => {
   res.render(__dirname + "/views/register.ejs");
 });
 
+app.post("/register", async (req, res) => {
+  const {  first_name, last_name, phone, email, password, otp} = req.body;
+
+  try {
+    // Validate session data for OTP and email
+    const storedOtp = req.session.otp;
+    const storedEmail = req.session.email;
+
+    if (!storedOtp || !storedEmail) {
+      return res.render("register", {
+        profile_name: "Guest",
+        homeActive: "active",
+        cartActive: "",
+        errorMessage: "OTP session expired. Please request a new OTP.",
+      });
+    }
+
+    // Validate OTP and email
+    const isOtpValid = await bcrypt.compare(otp, storedOtp);
+    if (!isOtpValid) {
+      return res.render("register", {
+        profile_name: "Guest",
+        homeActive: "active",
+        cartActive: "",
+        errorMessage: "Invalid OTP. Please try again.",
+      });
+    }
+
+    if (email !== storedEmail) {
+      return res.render("register", {
+        profile_name: "Guest",
+        homeActive: "active",
+        cartActive: "",
+        errorMessage: "Email mismatch. Please use the correct email.",
+      });
+    }
+
+    // Check if the user is already registered by email or mobile number
+    const checkResult = await db.query(
+      "SELECT * FROM users WHERE email = $1 OR phone = $2",
+      [email, phone]
+    );
+
+    if (checkResult.rows.length > 0) {
+      // Determine the specific error
+      const existingUser = checkResult.rows[0];
+      let errorMessage = "An account with these details already exists.";
+      if (existingUser.email === email) {
+        errorMessage = "Email is already registered.";
+      } else if (existingUser.phone === phone) {
+        errorMessage = "Mobile number is already registered.";
+      }
+      return res.render("register", {
+        profile_name: "Guest",
+        homeActive: "active",
+        cartActive: "",
+        errorMessage: errorMessage,
+      });
+    }
+
+    // Hash the password and register the user
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const result = await db.query(
+      `INSERT INTO users (fname, lname, phone, email, password, role)
+       VALUES ($1, $2, $3, $4, $5, 'attendee') RETURNING *`,
+      [first_name, last_name, phone, email, hashedPassword]
+    );
+
+    const user = result.rows[0];
+
+    // Log in the user after registration
+    req.login(user, (err) => {
+      if (err) {
+        console.error("Login error:", err);
+        return res.status(500).render("register", {
+          profile_name: "Guest",
+          homeActive: "active",
+          cartActive: "",
+          errorMessage: "An error occurred during login. Please try again.",
+        });
+      }
+
+      console.log("Registration successful");
+      return res.redirect("/home");
+    });
+  } catch (err) {
+    console.error("Error during registration:", err);
+    return res.status(500).render("register", {
+      profile_name: "Guest",
+      homeActive: "active",
+      cartActive: "",
+      errorMessage: "Something went wrong. Please try again later.",
+    });
+  }
+});
+
+
 //-------------------------- LOGIN Routes --------------------------//
 
 app.get("/login", (req, res) => {
   const username = req.isAuthenticated()
     ? get_username(req.user.email)
     : "Guest";
+
   res.render(__dirname + "/views/login.ejs");
 });
+
+app.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err); // Handle error
+    }
+    if (!user) {
+      // Flash the error message based on the reason provided by `info.message`
+      req.flash("error", info.message || "Invalid credentials. Please try again.");
+      return res.render("login");
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err); // Handle error
+      }
+      return res.redirect("/home"); // Successful login
+    });
+  })(req, res, next);
+});
+
+//-------------------------- LOGOUT Route --------------------------//
+
+app.get("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
+
+app.get("/profile/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
+
+
+//-------------------------- RESET PASSWORD Route --------------------------//
+
+app.get("/reset-password", (req, res) => {
+  active_page("home");
+  res.render(__dirname + "/views/reset_password.ejs", {
+    profile_name: "Guest",
+    homeActive: home_active,
+    cartActive: cart_active,
+  });
+});
+
+// when otp requested then it will send otp via smtp
+app.post("/send-otp", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res
+      .status(400)
+      .json({ success: false, error: "Email is required." });
+  }
+
+  try {
+    // Generate a random 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Hash the OTP before storing it
+    const hashedOtp = await bcrypt.hash(otp, 10);
+
+    // Store hashed OTP and email in session
+    req.session.otp = hashedOtp;
+    req.session.email = email;
+
+    // Configure SMTP transporter
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: process.env.SMTP_USER,
+      to: email,
+      subject: "Your OTP Code",
+      text: `Your OTP code is ${otp}. This code is valid for 10 minutes.`,
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    // Respond with success
+    res.json({ success: true });
+
+  } catch (err) {
+    console.error("Error sending OTP:", err);
+    res.status(500).json({ success: false, error: "Failed to send OTP." });
+  }
+});
+
+
+// when click on submit then check the user given otp with the generated otp, if matched then render new_password.ejs page
+app.post("/check-otp", async (req, res) => {
+  const { otp } = req.body;
+
+  // Retrieve hashed OTP and email from session
+  const hashedOtp = req.session.otp;
+  const email = req.session.email;
+
+  if (!hashedOtp || !email) {
+    return res.status(400).json({
+      success: false,
+      error: "OTP session expired. Please request a new OTP.",
+    });
+  }
+
+  // Verify the OTP
+  const isMatch = await bcrypt.compare(otp, hashedOtp);
+
+  if (isMatch) {
+    // OTP is correct, render the new password page
+    active_page("home");
+    res.render("new_password", {
+      email: email,
+      profile_name: "Guest",
+      homeActive: home_active,
+      cartActive: cart_active,
+    });
+  } else {
+    // OTP is incorrect
+    res.status(400).json({
+      success: false,
+      error: "Invalid OTP. Please try again.",
+    });
+  }
+});
+
+
+app.post("/reset-password", async (req, res) => {
+  const { password, confirm_password } = req.body;
+
+  if (password !== confirm_password) {
+      return res.status(400).json({ success: false, error: "Passwords do not match." });
+  }
+
+  const email = req.session.email;
+  if (!email) {
+      return res.status(400).json({ success: false, error: "Session expired. Please request OTP again." });
+  }
+
+  try {
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Update the password in the database (assuming you have a `users` table with an `email` column)
+      await db.query("UPDATE users SET password = $1 WHERE email = $2", [hashedPassword, email]);
+
+      // Optionally, clear the OTP and email session
+      delete req.session.otp;
+      delete req.session.email;
+
+      res.redirect("/home");
+  } catch (err) {
+      console.error("Error resetting password:", err);
+      res.status(500).json({ success: false, error: "Failed to reset password." });
+  }
+});
+
+//-------------------------- PASSPORT LOGICS --------------------------//
+
+app.get("/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+passport.use(
+  "local",
+  new Strategy(async function verify(email, password, cb) {
+    try {
+      const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+      if (result.rows.length === 0) {
+        return cb(null, false, { message: "Email not found. Please register." });
+      }
+
+      const user = result.rows[0];
+      const storedHashedPassword = user.password;
+
+      const valid = await bcrypt.compare(password, storedHashedPassword);
+      if (valid) {
+        return cb(null, user);
+      } else {
+        return cb(null, false, { message: "Incorrect password. Please try again." });
+      }
+    } catch (err) {
+      console.log(err);
+      return cb(err);
+    }
+  })
+);
+
+
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/auth/google/home",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    },
+    async (accessToken, refreshToken, profile, cb) => {
+      try {
+        const result = await db.query("SELECT * FROM users WHERE email = $1", [
+          profile.email,
+        ]);
+        if (result.rows.length === 0) {
+          const newUser = await db.query(
+            "INSERT INTO users (email, password) VALUES ($1, $2)",
+            [profile.email, "google"]
+          );
+          return cb(null, newUser.rows[0]);
+        } else {
+          return cb(null, result.rows[0]);
+        }
+      } catch (err) {
+        return cb(err);
+      }
+    }
+  )
+);
+
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+});
+
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
+});
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
