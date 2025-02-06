@@ -28,24 +28,24 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item my-btn">
-                        <a class="nav-link active" aria-current="page" href="/home"><i class='bx bx-home'></i> Home</a>
+                        <a class="nav-link <%= active_buttons[0] %>" aria-current="page" href="/home"><i class='bx bx-home'></i> Home</a>
                     </li>
                     <li class="nav-item my-btn">
-                        <a class="nav-link" href="/schedule"><i class='bx bx-calendar-event'></i> Schedule</a>
+                        <a class="nav-link <%= active_buttons[1] %>" href="/schedule"><i class='bx bx-calendar-event'></i> Schedule</a>
                     </li>
                     <li class="nav-item my-btn">
-                        <a class="nav-link" href="/activity"><i class='bx bx-list-ul'></i> Activities</a>
+                        <a class="nav-link <%= active_buttons[2] %>" href="/activity"><i class='bx bx-list-ul'></i> Activities</a>
                     </li>
                     <li class="nav-item my-btn">
-                        <a class="nav-link" href="/sponsors"><i class='bx bxs-donate-heart' ></i> Sponsors</a>
+                        <a class="nav-link <%= active_buttons[3] %>" href="/sponsors"><i class='bx bxs-donate-heart' ></i> Sponsors</a>
                     </li>
                     <li class="nav-item my-btn">
-                        <a class="nav-link" href="/gallery"><i class='bx bx-photo-album' ></i> Gallery</a>
+                        <a class="nav-link <%= active_buttons[4] %>" href="/gallery"><i class='bx bx-photo-album' ></i> Gallery</a>
                     </li>
                     <li class="nav-item my-btn">
-                        <a class="nav-link" href="/contact"><i class='bx bxs-contact' ></i> Contact us</a>
+                        <a class="nav-link <%= active_buttons[5] %>" href="/contact"><i class='bx bxs-contact' ></i> Contact us</a>
                     </li>
-                    <li class="nav-item my-btn dropdown">
+                    <li class="nav-item my-btn dropdown <%= active_buttons[6] %>">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             dipratidas
