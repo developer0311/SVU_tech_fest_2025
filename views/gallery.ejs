@@ -42,9 +42,10 @@
                 </div>
               </div>
               <div class="comment-section" id="comment-section-<%= post.post_id %>" style="display: none;">
-                <form action="/comment" method="POST">
+                <form onsubmit="submitComment(event, <%= post.post_id %>)">
                   <input type="hidden" name="post_id" value="<%= post.post_id %>">
-                  <textarea name="comment" placeholder="Write a comment..." required></textarea>
+                  <textarea name="comment" id="comment-text-<%= post.post_id %>" placeholder="Write a comment..."
+                    required></textarea>
                   <button type="submit" class="submit-comment" title="Post"><i class='bx bxs-send'></i></button>
                 </form>
                 <div class="comments-list">
@@ -119,6 +120,44 @@
       let section = document.getElementById("comment-section-" + postId);
       section.style.display = section.style.display === "none" ? "block" : "none";
     }
+
+    
+    function submitComment(event, postId) {
+      event.preventDefault(); // Prevent page reload
+
+      const commentText = document.getElementById(`comment-text-${postId}`).value;
+      if (!commentText.trim()) return;
+
+      fetch('/comment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ post_id: postId, comment: commentText })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Append new comment to the UI
+            const commentList = document.querySelector(`#comment-section-${postId} .comments-list`);
+            const newComment = document.createElement("div");
+            newComment.classList.add("comment");
+            newComment.innerHTML = `<p><strong>${data.fname} ${data.lname}:</strong> ${commentText}</p>`;
+            commentList.appendChild(newComment);
+
+            // Update comment count
+            const commentCount = document.querySelector(`#comment-section-${postId} ~ .post-like-comment span`);
+            commentCount.textContent = data.comment_count;
+
+            // Clear textarea
+            document.getElementById(`comment-text-${postId}`).value = '';
+          } else {
+            alert("Error posting comment");
+          }
+        })
+        .catch(err => console.error("Error submitting comment:", err));
+    }
+
   </script>
 
   <%- include('partials/footer') %>

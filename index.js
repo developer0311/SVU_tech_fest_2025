@@ -263,6 +263,49 @@ app.post("/like", async (req, res) => {
 });
 
 
+//-------------------------- COMMENT Routes --------------------------//
+
+app.post("/comment", async (req, res) => {
+  const user = req.user;
+  const { post_id, comment } = req.body
+
+  console.log(comment);
+  
+  if (!user.id || !post_id || !comment) {
+    console.log(user_id);
+    console.log(post_id_id);
+    return res.status(400).json({ success: false, message: "Missing fields" });
+  }
+
+  try {
+    await db.query(
+      "INSERT INTO post_comments (user_id, post_id, comment, commented_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP)",
+      [user.id, post_id, comment]
+    );
+
+    await db.query(
+      "UPDATE gallery SET comment_count = comment_count + 1 WHERE id = $1",
+      [post_id]
+    );
+
+    const commentCountResult = await db.query(
+      "SELECT comment_count FROM gallery WHERE id = $1",
+      [post_id]
+    );
+
+    res.json({
+      success: true,
+      fname: user.fname,
+      lname: user.lname,
+      comment_count: commentCountResult.rows[0].comment_count
+    });
+  } catch (err) {
+    console.error("Error saving comment", err);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+
+
 //-------------------------- REGISTER Routes --------------------------//
 
 app.get("/register", (req, res) => {
