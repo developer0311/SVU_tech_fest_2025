@@ -1,0 +1,38 @@
+
+
+/* For Mobile (width <= 480px) */
+@media (max-width: 570px) {
+  
+  
+  /*-------------------------- BASICS --------------------------*/
+
+  .cursor {
+    width: 15px;
+    height: 15px;
+  }
+
+  .cursor-trail {
+    width: 10px; /* Smaller trail for small devices */
+    height: 10px;
+  }
+
+  .hero {
+    font-size: 1.5rem; /* Smaller text size on mobile */
+    padding: 20px;
+  }
+
+  .cta-button {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+
+  .explore-events{
+    width: 200px;
+  }
+}
+
+
+
+
+
+

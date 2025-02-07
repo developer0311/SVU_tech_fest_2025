@@ -1,0 +1,8 @@
+@media (max-width: 400px) {
+    #home{
+        padding: 20px;
+    }
+    #home .hero-text h1{
+        font-size: 2rem;
+    }
+}

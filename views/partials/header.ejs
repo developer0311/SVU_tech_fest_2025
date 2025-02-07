@@ -9,16 +9,19 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/media.css">
+    <link rel="stylesheet" href="css/media_300.css">
+    <link rel="stylesheet" href="css/media_570.css">
+    <link rel="stylesheet" href="css/media_770.css">
+    <link rel="stylesheet" href="css/media_1024.css">
 </head>
 
 
 <body>
     <div class="cursor"></div>
 
-    <nav class="navbar navbar-expand-xxl">
+    <nav class="navbar navbar-expand-xl">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">TECHNOVA</a>
+            <a class="navbar-brand" href="#">Nirman Mela</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -28,22 +31,28 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item my-btn">
-                        <a class="nav-link <%= active_buttons[0] %>" aria-current="page" href="/home"><i class='bx bx-home'></i> Home</a>
+                        <a class="nav-link <%= active_buttons[0] %>" aria-current="page" href="/home"><i
+                                class='bx bx-home'></i> Home</a>
                     </li>
                     <li class="nav-item my-btn">
-                        <a class="nav-link <%= active_buttons[1] %>" href="/schedule"><i class='bx bx-calendar-event'></i> Schedule</a>
+                        <a class="nav-link <%= active_buttons[1] %>" href="/schedule"><i
+                                class='bx bx-calendar-event'></i> Schedule</a>
                     </li>
                     <li class="nav-item my-btn">
-                        <a class="nav-link <%= active_buttons[2] %>" href="/activity"><i class='bx bx-list-ul'></i> Activities</a>
+                        <a class="nav-link <%= active_buttons[2] %>" href="/activity"><i class='bx bx-list-ul'></i>
+                            Activities</a>
                     </li>
                     <li class="nav-item my-btn">
-                        <a class="nav-link <%= active_buttons[3] %>" href="/sponsors"><i class='bx bxs-donate-heart' ></i> Sponsors</a>
+                        <a class="nav-link <%= active_buttons[3] %>" href="/sponsors"><i
+                                class='bx bxs-donate-heart'></i> Sponsors</a>
                     </li>
                     <li class="nav-item my-btn">
-                        <a class="nav-link <%= active_buttons[4] %>" href="/gallery"><i class='bx bx-photo-album' ></i> Gallery</a>
+                        <a class="nav-link <%= active_buttons[4] %>" href="/gallery"><i class='bx bx-photo-album'></i>
+                            Gallery</a>
                     </li>
                     <li class="nav-item my-btn">
-                        <a class="nav-link <%= active_buttons[5] %>" href="/contact"><i class='bx bxs-contact' ></i> Contact us</a>
+                        <a class="nav-link <%= active_buttons[5] %>" href="/contact"><i class='bx bxs-contact'></i>
+                            Contact us</a>
                     </li>
                     <li class="nav-item my-btn dropdown <%= active_buttons[6] %>">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -51,12 +60,13 @@
                             dipratidas
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/profile"><i class='bx bx-user-circle' ></i> Profile</a></li>
-                            <li><a class="dropdown-item" href="/admin"><i class='bx bxs-user-x' ></i> Admin</a></li>
+                            <li><a class="dropdown-item" href="/profile"><i class='bx bx-user-circle'></i> Profile</a>
+                            </li>
+                            <li><a class="dropdown-item" href="/admin"><i class='bx bxs-user-x'></i> Admin</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="/logout"><i class='bx bx-log-out' ></i> Logout</a></li>
+                            <li><a class="dropdown-item" href="/logout"><i class='bx bx-log-out'></i> Logout</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

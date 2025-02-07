@@ -1,0 +1,51 @@
+/* For Larger Screens (width > 1024px) */
+
+@media only screen and (max-width: 1400px) {
+  .navbar .nav-item .nav-link {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 1250px) {
+  .navbar .nav-item .nav-link {
+    padding: 0.2rem;
+  }
+}
+
+
+@media only screen and (max-width: 1024px) {
+  .cursor {
+    width: 25px;
+    height: 25px;
+  }
+
+  .cursor-trail {
+    width: 20px;
+    height: 20px;
+  }
+
+  .hero {
+    font-size: 2rem; /* Larger text for wide screens */
+    padding: 60px;
+  }
+
+  .cta-button {
+    padding: 18px 35px;
+    font-size: 1.3rem;
+  }
+
+/*-------------------------- GALLERY --------------------------*/
+
+.gallery{
+    width: 100vw;
+}
+.gallery-posts {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+}

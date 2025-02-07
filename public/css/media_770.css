@@ -1,0 +1,46 @@
+/* For Tablets (width <= 768px) */
+
+@media (max-width: 770px) {
+
+  /*-------------------------- BASICS --------------------------*/
+  
+  html{
+    font-size: 70%;
+  }
+
+  .cursor {
+    width: 18px;
+    height: 18px;
+  }
+
+  .cursor-trail {
+    width: 12px;
+    height: 12px;
+  }
+
+  .hero {
+    font-size: 1.7rem; /* Slightly smaller text */
+    padding: 30px;
+  }
+
+  .cta-button {
+    padding: 13px 28px;
+    font-size: 1.1rem;
+  }
+
+  
+  /*-------------------------- HOME --------------------------*/
+
+  .events .card {
+    margin-bottom: 20px;
+  }
+
+
+  /*-------------------------- EVENTS --------------------------*/
+
+  .event-list {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
