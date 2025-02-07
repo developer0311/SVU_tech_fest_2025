@@ -34,12 +34,16 @@
                     <%= post.comment_count %>
                   </span>
                 </div>
+
                 <div class="l-c-s-d-option">
-                  <i class='bx bx-share' title="Share"></i>
-                  <span>
-                    <%= post.share_count %>
-                  </span>
+                  <i id="share-icon-<%= post.post_id %>" class="bx bx-share" title="Share"
+                     onclick="sharePost(<%= post.post_id %>, '<%= post.image_url %>', '<%= post.description %>')">
+                  </i>
+                  <span id="share-count-<%= post.post_id %>"><%= post.share_count %></span>
                 </div>
+                
+                
+                
               </div>
               <div class="comment-section" id="comment-section-<%= post.post_id %>" style="display: none;">
                 <form onsubmit="submitComment(event, <%= post.post_id %>)">
@@ -157,6 +161,37 @@
         })
         .catch(err => console.error("Error submitting comment:", err));
     }
+
+    function sharePost(postId, imageUrl, description) {
+    const postUrl = `${window.location.origin}/gallery/${postId}`;
+    const title = "Check out this post!";
+    const text = description;
+
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            text: text,
+            url: postUrl
+        }).then(() => {
+            updateShareCount(postId);
+        }).catch(console.error);
+    } else {
+        alert("Sharing is not supported on this device.");
+    }
+}
+
+function updateShareCount(postId) {
+    fetch(`/update-share-count/${postId}`, { method: "POST" })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`share-count-${postId}`).innerText = data.newCount;
+            }
+        })
+        .catch(console.error);
+}
+
+
 
   </script>
 

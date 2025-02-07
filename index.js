@@ -20,8 +20,13 @@ const admin_password = process.env.ADMIN_PASSWORD;
 const RAZORPAY_ID_KEY = process.env.RAZORPAY_ID_KEY;
 const RAZORPAY_SECRET_KEY = process.env.RAZORPAY_SECRET_KEY;
 let home_active = "active";
-let cart_active = "";
-let social_active = "";
+let schedule_active = "";
+let activity_active = "";
+let sponsor_active = "";
+let gallery_active = "";
+let contact_active = "";
+
+let active_buttons = ["active", "", "", "", "" , "", ""]
 
 app.set("view engine", "ejs");
 
@@ -66,17 +71,25 @@ let get_username = (email) => {
 
 let active_page = (pageName) => {
   if (pageName == "home") {
-    home_active = "my-active";
-    cart_active = "";
-    social_active = "";
-  } else if (pageName == "cart") {
-    home_active = "";
-    cart_active = "my-active";
-    social_active = "";
-  } else if (pageName == "social") {
-    home_active = "";
-    cart_active = "";
-    social_active = "my-active";
+    return ["active", "", "", "", "" , "", ""];
+
+  } else if (pageName == "schedule") {
+    return ["", "active", "", "", "" , "", ""];
+
+  } else if (pageName == "activity") {
+    return ["", "", "active", "", "" , "", ""];
+
+  } else if (pageName == "sponsor") {
+    return ["", "", "", "active", "" , "", ""];
+
+  } else if (pageName == "gallery") {
+    return ["", "", "", "" , "active", "", ""];
+
+  } else if (pageName == "contact") {
+    return ["", "", "", "", "" , "active", ""];
+
+  } else if (pageName == "profile") {
+    return ["", "", "", "", "" , "", "active"];
   }
 };
 
@@ -87,7 +100,9 @@ app.get("/", (req, res) => {
   const username = req.isAuthenticated()
     ? get_username(req.user.email)
     : "Guest";
-  res.render(__dirname + "/views/home.ejs");
+
+  active_buttons = active_page("home");
+  res.render(__dirname + "/views/home.ejs", {active_buttons});
 });
 
 //-------------------------- INDEX Routes --------------------------//
@@ -101,13 +116,13 @@ app.get(
 );
 
 app.get("/home", async (req, res) => {
-  active_page("home");
+  active_buttons = active_page("home");
   if (req.isAuthenticated()) {
     try {
       const user = req.user;
       let user_id = user.id;
   
-      res.render(__dirname + "/views/index.ejs");
+      res.render(__dirname + "/views/index.ejs", {active_buttons});
     } catch (err) {
       console.log(err);
     }
@@ -126,12 +141,15 @@ app.get("/schedule", async (req, res) => {
   const username = req.isAuthenticated()
     ? get_username(req.user.email)
     : "Guest";
+
+    active_buttons = active_page("schedule");
+
   const s_result = await db.query(
     "SELECT * FROM events WHERE start_time >= $1 and event_type = $2 ORDER BY start_time ASC",
     [new Date(), `event`] // Fetch events that are starting now or in the future
   );
 
-  res.render(__dirname + "/views/schedule.ejs", { events: s_result.rows });
+  res.render(__dirname + "/views/schedule.ejs", { active_buttons, events: s_result.rows });
 });
 
 //-------------------------- SCHEDULE Routes --------------------------//
@@ -145,19 +163,27 @@ app.get("/activity", async (req, res) => {
     ? get_username(req.user.email)
     : "Guest";
 
+    active_buttons = active_page("activity");
+
   const m_result = await db.query(
     "SELECT * FROM events WHERE start_time >= $1 and event_type = $2 ORDER BY start_time ASC",
     [new Date(), `activity`] // Fetch events that are starting now or in the future
   );
 
-  res.render(__dirname + "/views/schedule.ejs", { events: m_result.rows });
+  res.render(__dirname + "/views/schedule.ejs", { active_buttons, events: m_result.rows });
 });
 
 //-------------------------- GALLERY Routes --------------------------//
 
 app.get("/gallery", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/login"); // Redirect to login if not authenticated
+  }
+
+  active_buttons = active_page("gallery");
+
   try {
-    const user_id = 1; // Authenticated user
+    const user_id = req.user.id; // Authenticated user
 
     const posts = await db.query(`
       SELECT 
@@ -198,7 +224,8 @@ app.get("/gallery", async (req, res) => {
     `, [user_id]);
 
     res.render(__dirname + "/views/gallery", {
-      user: 1,
+      active_buttons,
+      user: user_id,
       posts: posts.rows,
     });
   } catch (error) {
@@ -212,6 +239,8 @@ app.get("/profile", async(req, res) =>{
   if (!req.isAuthenticated()) {
     return res.redirect("/login"); // Redirect to login if not authenticated
   }
+  active_buttons = active_page("profile");
+
   const user_id = req.user.id
   const user_result = await db.query(`SELECT * from users WHERE id = $1`,[user_id]);
   const events = await db.query(`
@@ -220,7 +249,7 @@ app.get("/profile", async(req, res) =>{
     WHERE registrations.user_id = $1
 `, [1]);
 
-res.render(__dirname + '/views/profile', { user: user_result.rows[0], events: events.rows });
+res.render(__dirname + '/views/profile', { active_buttons,  user: user_result.rows[0], events: events.rows });
 });
 
 
@@ -319,8 +348,6 @@ app.post("/like", async (req, res) => {
 app.post("/comment", async (req, res) => {
   const user = req.user;
   const { post_id, comment } = req.body
-
-  console.log(comment);
   
   if (!user.id || !post_id || !comment) {
     console.log(user_id);
@@ -357,13 +384,37 @@ app.post("/comment", async (req, res) => {
 });
 
 
+app.post('/update-share-count/:id', async (req, res) => {
+  const imageId = req.params.id;
+
+  try {
+      const result = await db.query(
+          "UPDATE gallery SET share_count = share_count + 1 WHERE id = $1 RETURNING share_count",
+          [imageId]
+      );
+
+      if (result.rowCount > 0) {
+          res.json({ success: true, newCount: result.rows[0].share_count });
+      } else {
+          res.status(404).json({ success: false, message: "Image not found" });
+      }
+  } catch (error) {
+      console.error("Error updating share count:", error);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+
+
 //-------------------------- REGISTER Routes --------------------------//
 
 app.get("/register", (req, res) => {
   const username = req.isAuthenticated()
     ? get_username(req.user.email)
     : "Guest";
-  res.render(__dirname + "/views/register.ejs");
+
+    active_buttons = active_page("home");
+
+  res.render(__dirname + "/views/register.ejs", {active_buttons});
 });
 
 app.post("/register", async (req, res) => {
@@ -471,7 +522,9 @@ app.get("/login", (req, res) => {
     ? get_username(req.user.email)
     : "Guest";
 
-  res.render(__dirname + "/views/login.ejs");
+    active_buttons = active_page("home");
+
+  res.render(__dirname + "/views/login.ejs", {active_buttons});
 });
 
 app.post("/login", (req, res, next) => {
@@ -517,11 +570,10 @@ app.get("/profile/logout", (req, res) => {
 //-------------------------- RESET PASSWORD Route --------------------------//
 
 app.get("/reset-password", (req, res) => {
-  active_page("home");
+  active_buttons = active_page("home");
   res.render(__dirname + "/views/reset_password.ejs", {
+    active_buttons,
     profile_name: "Guest",
-    homeActive: home_active,
-    cartActive: cart_active,
   });
 });
 
@@ -596,7 +648,7 @@ app.post("/check-otp", async (req, res) => {
 
   if (isMatch) {
     // OTP is correct, render the new password page
-    active_page("home");
+    active_buttons = active_page("home");
     res.render("new_password", {
       email: email,
       profile_name: "Guest",

@@ -71,7 +71,8 @@ section {
   position: relative;
 }
 
-.my-btn::after {
+.my-btn::after,
+.active::after {
   content: "";
   position: absolute;
   width: 100%;
@@ -84,7 +85,8 @@ section {
   transition: transform 0.25s ease-out;
 }
 
-.my-btn:hover::after {
+.my-btn:hover::after,
+.active::after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
