@@ -1,29 +1,64 @@
 <%- include('partials/header') %>
 
+    <section class="activity container my-5">
+        <h2 class="text-center mb-4 bottom">Upcoming Activities</h2>
+        <div class="activity-list">
+            <% if (activities.length> 0) { %>
+                <% activities.forEach(activity=> { %> <!-- Loop through activities -->
+                    <div class="card activity-card mx-4 top">
+                        <div class="activity-img-container">
+                            <img src="<%= activity.banner_image || 'default-banner.jpg' %>" class="activity-img"
+                                alt="Activity Image">
+                        </div>
 
-<%- include('partials/header') %>
+                        <div class="activity-body">
+                            <h3 class="activity-title">
+                                <%= activity.title %>
+                            </h3>
+                            <p class="activity-text"><strong>Category:</strong>
+                                <%= activity.category %>
+                            </p>
+                            <p class="activity-text"><strong>Description:</strong>
+                                <%= activity.description %>
+                            </p>
+                            <p class="activity-text"><strong>Start Time:</strong>
+                                <%= new Date(activity.start_time).toLocaleString() %>
+                            </p>
+                            <p class="activity-text"><strong>End Time:</strong>
+                                <%= new Date(activity.end_time).toLocaleString() %>
+                            </p>
+                            <p class="activity-text"><strong>Location:</strong>
+                                <%= activity.location %>
+                            </p>
+                            <p class="activity-text"><strong>Registration Deadline:</strong>
+                                <%= new Date(activity.registration_deadline).toLocaleString() %>
+                            </p>
+                            <a href="/activity/<%= activity.id %>" class="btn btn-primary mt-3">View Details</a>
+                        </div>
+                    </div>
 
-<section class="activities">
-    <h2>Upcoming Activities</h2>
-    <div class="activity-list">
-        <% if (activities.length > 0) { %>
-            <% activities.forEach(function(activity) { %>
-                <div class="activity-card">
-                    <h3><%= activity.name %></h3>
-                    <p><strong>Description:</strong> <%= activity.description %></p>
-                    <p><strong>Start Time:</strong> <%= new Date(activity.start_time).toLocaleString() %></p>
-                    <p><strong>End Time:</strong> <%= new Date(activity.end_time).toLocaleString() %></p>
-                    <p><strong>Location:</strong> <%= activity.location %></p>
-                    <a href="/activity/<%= activity.id %>">View Details</a>
-                </div>
-            <% }); %>
-        <% } else { %>
-            <p>No activities scheduled at the moment. Please check back later.</p>
-        <% } %>
-    </div>
-</section>
+                    <% }); %>
+                        <% } else { %>
+                            <p class="no-activities">No activities scheduled at the moment. Please check back later.</p>
+                            <% } %>
+        </div>
+    </section>
 
-<%- include('partials/footer') %>
+    <!-- Scroll Reveal -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script>
+        // Scroll reveal animations
+        ScrollReveal({
+            reset: false,
+            distance: "60px",
+            duration: 2000,
+            delay: 200
+        });
 
+        ScrollReveal().reveal('.bottom', { origin: `top` });
+        ScrollReveal().reveal('.top', { origin: `bottom` });
+        ScrollReveal().reveal('.left', { origin: `left` });
+        ScrollReveal().reveal('.right', { origin: `right` });
+    </script>
 
-<%- include('partials/footer') %>
+    <%- include('partials/footer') %>

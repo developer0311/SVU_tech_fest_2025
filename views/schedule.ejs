@@ -1,51 +1,65 @@
 <%- include('partials/header') %>
 
     <section class="events container my-5">
-        <h2 class="text-center mb-4">Upcoming Events</h2>
+        <h2 class="text-center mb-4 bottom">Upcoming Events</h2>
         <div class="event-list">
             <% if (events.length> 0) { %>
-                <% for (let i=0; i < 10; i++) { %> <!-- Looping for testing -->
-                    <% let event=events[i % events.length]; %> <!-- Cycle through available events -->
-
-                        <div class="card event-card mx-4">
-                            <div class="card-img-container">
-                                <img src="<%= event.banner_image || 'default-banner.jpg' %>" class="card-img-top"
-                                    alt="Event Image">
-                            </div>
-
-                            <div class="card-body">
-                                <h3 class="card-title">
-                                    <%= event.title %>
-                                </h3>
-                                <p class="card-text"><strong>Category:</strong>
-                                    <%= event.category %>
-                                </p>
-                                <p class="card-text"><strong>Description:</strong>
-                                    <%= event.description %>
-                                </p>
-                                <p class="card-text"><strong>Start Time:</strong>
-                                    <%= new Date(event.start_time).toLocaleString() %>
-                                </p>
-                                <p class="card-text"><strong>End Time:</strong>
-                                    <%= new Date(event.end_time).toLocaleString() %>
-                                </p>
-                                <p class="card-text"><strong>Location:</strong>
-                                    <%= event.location %>
-                                </p>
-                                <p class="card-text"><strong>Registration Deadline:</strong>
-                                    <%= new Date(event.registration_deadline).toLocaleString() %>
-                                </p>
-                                <a href="/event/<%= event.id %>" class="btn btn-primary">View Details</a>
-                            </div>
+                <% events.forEach(event=> { %> <!-- Loop through events -->
+                    <div class="card event-card mx-4 top">
+                        <div class="card-img-container">
+                            <img src="<%= event.banner_image || 'default-banner.jpg' %>" class="card-img-top"
+                                alt="Event Image">
                         </div>
 
-                        <% } %>
-                            <% } else { %>
-                                <p class="no-events">No events scheduled at the moment. Please check back later.</p>
-                                <% } %>
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <%= event.title %>
+                            </h3>
+                            <p class="card-text"><strong>Category:</strong>
+                                <%= event.category %>
+                            </p>
+                            <p class="card-text"><strong>Description:</strong>
+                                <%= event.description %>
+                            </p>
+                            <p class="card-text"><strong>Start Time:</strong>
+                                <%= new Date(event.start_time).toLocaleString() %>
+                            </p>
+                            <p class="card-text"><strong>End Time:</strong>
+                                <%= new Date(event.end_time).toLocaleString() %>
+                            </p>
+                            <p class="card-text"><strong>Location:</strong>
+                                <%= event.location %>
+                            </p>
+                            <p class="card-text"><strong>Registration Deadline:</strong>
+                                <%= new Date(event.registration_deadline).toLocaleString() %>
+                            </p>
+                            <a href="/event/<%= event.id %>" class="btn btn-primary mt-5">View Details</a>
+                        </div>
+                    </div>
+
+
+                    <% }); %>
+                        <% } else { %>
+                            <p class="no-events">No events scheduled at the moment. Please check back later.</p>
+                            <% } %>
         </div>
     </section>
 
+    <!-- Scroll Reveal -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script>
+        // Scroll reveal
+        ScrollReveal({
+            reset: false,
+            distance: "60px",
+            duration: 2000,
+            delay: 200
+        });
 
+        ScrollReveal().reveal('.bottom', { origin: `top` });
+        ScrollReveal().reveal('.top', { origin: `bottom` });
+        ScrollReveal().reveal('.left', { origin: `left` });
+        ScrollReveal().reveal('.right', { origin: `right` });
+    </script>
 
     <%- include('partials/footer') %>

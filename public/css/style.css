@@ -121,7 +121,6 @@ section {
   animation: heartbeat 1s ease-in-out infinite;
 }
 
-
 /*-------------------------- ANIMATIONS --------------------------*/
 
 /* Adjusted animation for smoother and smaller trails */
@@ -366,32 +365,38 @@ footer i {
   text-align: center;
 }
 
-
 /*-------------------------- SCHEDULE.ejs --------------------------*/
 
-/* General Events Section */
-.events {
-  text-align: center;
+/* General Styling for Events & Activities */
+.events,
+.activity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 50px 20px;
 }
 
-.events h2 {
+.events h2,
+.activity h2 {
   font-size: 2.5rem;
   font-weight: bold;
   color: #00eaff; /* Futuristic neon blue */
   text-shadow: 0 0 10px rgba(0, 234, 255, 0.8);
 }
 
-/* Event List */
-.event-list {
+/* Event & Activity List */
+.event-list,
+.activity-list {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 25px;
 }
 
-/* Event Item - Futuristic Card */
-.event-item {
+/* Event & Activity Cards */
+.event-card,
+.activity-card {
   background: rgba(255, 255, 255, 0.1); /* Glassmorphism effect */
   backdrop-filter: blur(10px);
   padding: 15px;
@@ -402,71 +407,60 @@ footer i {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.event-item:hover {
+.event-card:hover,
+.activity-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 0 15px rgba(0, 234, 255, 0.8), 0 0 30px rgba(0, 234, 255, 0.4);
 }
 
-/* Event Card Styling */
-.event-card {
-  border: none;
-  border-radius: 15px;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(20, 20, 20, 0.9));
-  padding: 10px;
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-/* Card Hover Effect */
-.event-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
-}
-
-/* Fixed 4:3 Aspect Ratio for Images */
-.card-img-container {
+/* Event & Activity Image Container */
+.card-img-container,
+.activity-img-container {
   width: 100%;
   position: relative;
-  padding-top: 75%; /* 4:3 aspect ratio (height = 75% of width) */
+  padding-top: 75%; /* 4:3 aspect ratio */
 }
 
-.card-img-top {
+.card-img-top,
+.activity-img {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures full coverage without stretching */
+  object-fit: cover;
   border-radius: 10px;
   filter: brightness(90%);
   transition: filter 0.3s ease-in-out;
 }
 
-.card-img-top:hover {
+.card-img-top:hover,
+.activity-img:hover {
   filter: brightness(110%);
 }
 
-/* Card Body Styling */
-.card-body {
+/* Event & Activity Card Body */
+.card-body,
+.activity-body {
   padding: 15px;
   color: #f8f9fa;
 }
 
-
-.card-title {
+.card-title,
+.activity-title {
   font-size: 1.5rem;
   font-weight: bold;
   color: #00eaff;
   text-shadow: 0 0 8px rgba(0, 234, 255, 0.8);
 }
 
-/* Card Text */
-.card-text {
+/* Event & Activity Text */
+.card-text,
+.activity-text {
   font-size: 1rem;
   line-height: 1.6;
   color: #bbb;
 }
-
 
 /*-------------------------- SPONSOR.ejs --------------------------*/
 
@@ -477,7 +471,6 @@ footer i {
   justify-content: center;
   padding: 20px;
 }
-
 
 .sponsor-item {
   text-decoration: none;
@@ -549,9 +542,6 @@ footer i {
   color: gray;
   text-align: center;
 }
- 
-
-
 
 /*-------------------------- GALLERY.ejs --------------------------*/
 
@@ -563,7 +553,7 @@ footer i {
   align-items: center;
 }
 
-.gallery h2{
+.gallery h2 {
   margin-bottom: 20px;
 }
 
@@ -587,7 +577,7 @@ footer i {
   align-items: flex-start;
 }
 
-.gallery-card p{
+.gallery-card p {
   margin-bottom: 5px;
 }
 
@@ -618,7 +608,7 @@ footer i {
   padding: 1rem;
 }
 
-.gallery-card .post-details p{
+.gallery-card .post-details p {
   margin-bottom: 5px;
   overflow-x: hidden;
 }
@@ -677,7 +667,7 @@ footer i {
   align-items: center;
 }
 
-.comment-section form textarea{
+.comment-section form textarea {
   width: 90%;
   border-radius: 5px;
   padding: 5px 10px;
@@ -687,22 +677,21 @@ footer i {
   border: 1px solid var(--body-text-color);
 }
 
-.comment-section form button{
- border-radius: 50%;
- padding: 10px;
- display: flex;
- justify-content: center;
- align-items: center;
- border: none;
- outline: none;
- background-color: var(--body-text-color);
- color: var(--nav-bg-color);
+.comment-section form button {
+  border-radius: 50%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  outline: none;
+  background-color: var(--body-text-color);
+  color: var(--nav-bg-color);
 }
 
 .comments {
   padding: 0.5rem;
 }
-
 
 .comment-section .submit-comment:hover {
   box-shadow: 0px 0px 10px 1px var(--body-text-color);
@@ -732,14 +721,13 @@ footer i {
   background-color: #f0f0f0;
 }
 
-
 /*-------------------------- PROFILE.ejs --------------------------*/
 
 .profile {
   padding: 20px;
 }
 
-.profile .greeting-section{
+.profile .greeting-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -752,11 +740,11 @@ footer i {
   margin-bottom: 10px;
 }
 
-.greeting-section p{
+.greeting-section p {
   margin-bottom: 5px;
 }
 
-.exciting-tech-lines{
+.exciting-tech-lines {
   margin-top: 10px;
 }
 
@@ -766,7 +754,7 @@ footer i {
   margin: 5px 0;
 }
 
-.user-events{
+.user-events {
   display: flex;
   flex-direction: column;
   justify-content: center;

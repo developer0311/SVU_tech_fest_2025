@@ -152,7 +152,7 @@ app.get("/schedule", async (req, res) => {
   res.render(__dirname + "/views/schedule.ejs", { active_buttons, events: s_result.rows });
 });
 
-//-------------------------- SCHEDULE Routes --------------------------//
+//-------------------------- ACTIVITY Routes --------------------------//
 
 app.get("/activity", async (req, res) => {
   if (!req.isAuthenticated()) {
@@ -163,14 +163,16 @@ app.get("/activity", async (req, res) => {
     ? get_username(req.user.email)
     : "Guest";
 
-    active_buttons = active_page("activity");
+  active_buttons = active_page("activity");
+
+  const nowUtc = new Date().toISOString(); // Convert to UTC format
 
   const m_result = await db.query(
-    "SELECT * FROM events WHERE start_time >= $1 and event_type = $2 ORDER BY start_time ASC",
-    [new Date(), `activity`] // Fetch events that are starting now or in the future
-  );
+    "SELECT * FROM events WHERE start_time >= $1 AND event_type = $2 ORDER BY start_time ASC",
+    [nowUtc, 'activity']
+  );  
 
-  res.render(__dirname + "/views/schedule.ejs", { active_buttons, events: m_result.rows });
+  res.render(__dirname + "/views/activity.ejs", { active_buttons, activities: m_result.rows });
 });
 
 //-------------------------- GALLERY Routes --------------------------//

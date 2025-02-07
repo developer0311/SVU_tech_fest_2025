@@ -1,11 +1,11 @@
 <%- include('partials/header') %>
 
 <section class="sponsors container my-5">
-    <h2 class="text-center mb-4">Our Sponsors</h2>
+    <h2 class="text-center mb-4 bottom">Our Sponsors</h2>
     <div class="row justify-content-center g-4"> <!-- Added 'g-4' for spacing -->
         <% if (sponsors.length > 0) { %>
             <% sponsors.forEach(sponsor => { %> 
-                <div class="col-xl-4 col-md-6 col-sm-12"> <!-- 3 per row on large, 2 per row below 1200px, 1 per row below 770px -->
+                <div class="col-xl-4 col-md-6 col-sm-12 top"> <!-- 3 per row on large, 2 per row below 1200px, 1 per row below 770px -->
                     <a href="<%= sponsor.website_url %>" class="sponsor-item d-block text-decoration-none" target="_blank" rel="noopener noreferrer">
                         <div class="sponsor-box shadow-lg p-3">
                             <div class="sponsor-logo text-center">
@@ -21,5 +21,26 @@
         <% } %>
     </div>
 </section>
+
+
+<!-- Scroll Reveal -->
+<script src="https://unpkg.com/scrollreveal"></script>
+
+<script>
+    // Scroll reveal
+
+    ScrollReveal({
+            reset: false,
+            distance: "60px",
+            duration: 2000,
+            delay: 200
+        });
+
+        ScrollReveal().reveal('.bottom', { origin: `top` });
+        ScrollReveal().reveal('.top', { origin: `bottom` });
+        ScrollReveal().reveal('.left', { origin: `left` });
+        ScrollReveal().reveal('.right', { origin: `right` });
+</script>
+
 
 <%- include('partials/footer') %>

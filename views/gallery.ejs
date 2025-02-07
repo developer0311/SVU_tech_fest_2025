@@ -1,7 +1,7 @@
 <%- include('partials/header') %>
 
   <section class="gallery">
-    <h2>Gallery</h2>
+    <h2 class="top">Gallery</h2>
     <div class="gallery-posts">
       <% if (posts.length> 0) { %>
         <% posts.forEach(function(post) { %>
@@ -82,8 +82,8 @@
       delay: 200
     });
 
-    ScrollReveal().reveal('', { origin: `top` });
-    ScrollReveal().reveal('.gallery-card', { origin: `bottom` });
+    ScrollReveal().reveal('.top', { origin: `top` });
+    ScrollReveal().reveal('.gallery-card, .bottom', { origin: `bottom` });
     ScrollReveal().reveal('.left', { origin: `left` });
     ScrollReveal().reveal('.right', { origin: `right` });
 
