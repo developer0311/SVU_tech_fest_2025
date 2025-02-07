@@ -405,6 +405,31 @@ app.post('/update-share-count/:id', async (req, res) => {
 });
 
 
+//-------------------------- COMMENT Routes --------------------------//
+
+app.get("/contact", (req, res)=>{
+  active_buttons = active_page("contact");
+  res.render(__dirname + "/views/contact.ejs", { active_buttons });
+})
+
+app.post("/contact", async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    // Insert into database and return inserted row
+    const result = await db.query(
+      "INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3) RETURNING *",
+      [name, email, message]
+    );
+
+
+    res.json({ success: true, message: "Message sent successfully!", data: result.rows[0] });
+  } catch (err) {
+    console.error("Error submitting contact form:", err);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+ 
 //-------------------------- REGISTER Routes --------------------------//
 
 app.get("/register", (req, res) => {
