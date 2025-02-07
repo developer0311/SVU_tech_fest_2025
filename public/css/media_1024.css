@@ -10,8 +10,13 @@
   .navbar .nav-item .nav-link {
     padding: 0.2rem;
   }
-}
 
+  /*-------------------------- SPONSORS --------------------------*/
+
+  .sponsor-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 @media only screen and (max-width: 1024px) {
   .cursor {

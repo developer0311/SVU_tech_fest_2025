@@ -467,6 +467,92 @@ footer i {
   color: #bbb;
 }
 
+
+/*-------------------------- SPONSOR.ejs --------------------------*/
+
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Default: 3 per row */
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+
+.sponsor-item {
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+}
+
+.sponsor-box {
+  width: 100%;
+  aspect-ratio: 4 / 3; /* Ensures 4:3 ratio */
+  background: linear-gradient(135deg, #1a1a1a, #333); /* Deep futuristic look */
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sponsor-box::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(25deg);
+  top: -75%;
+  left: -50%;
+  transition: 0.5s ease-in-out;
+}
+
+.sponsor-item:hover .sponsor-box::before {
+  top: 100%;
+}
+
+.sponsor-logo {
+  width: 100%;
+  height: 70%; /* Adjusted height for a better look */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sponsor-logo img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain; /* Ensures full visibility without cropping */
+}
+
+.sponsor-name {
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: auto;
+}
+
+.sponsor-item:hover .sponsor-box {
+  transform: scale(1.07);
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+}
+
+.no-sponsors {
+  font-size: 16px;
+  color: gray;
+  text-align: center;
+}
+ 
+
+
+
 /*-------------------------- GALLERY.ejs --------------------------*/
 
 .gallery {

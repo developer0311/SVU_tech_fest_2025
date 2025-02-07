@@ -79,7 +79,7 @@ let active_page = (pageName) => {
   } else if (pageName == "activity") {
     return ["", "", "active", "", "" , "", ""];
 
-  } else if (pageName == "sponsor") {
+  } else if (pageName == "sponsors") {
     return ["", "", "", "active", "" , "", ""];
 
   } else if (pageName == "gallery") {
@@ -405,14 +405,18 @@ app.post('/update-share-count/:id', async (req, res) => {
 });
 
 
-//-------------------------- COMMENT Routes --------------------------//
+//-------------------------- CONTACT Routes --------------------------//
 
 app.get("/contact", (req, res)=>{
   active_buttons = active_page("contact");
   res.render(__dirname + "/views/contact.ejs", { active_buttons });
-})
+});
 
 app.post("/contact", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/login"); // Redirect to login if not authenticated
+  }
+
   try {
     const { name, email, message } = req.body;
 
@@ -429,6 +433,21 @@ app.post("/contact", async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
+
+
+//-------------------------- CONTACT Routes --------------------------//
+
+app.get("/sponsors", async (req, res) => {
+  try {
+    active_buttons = active_page("sponsors");
+    const result = await db.query("SELECT * FROM sponsors ORDER BY created_at DESC");
+    res.render("sponsors", { active_buttons, sponsors: result.rows });
+  } catch (err) {
+    console.error("Error fetching sponsors:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
  
 //-------------------------- REGISTER Routes --------------------------//
 
